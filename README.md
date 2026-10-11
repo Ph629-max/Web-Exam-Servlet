@@ -58,7 +58,9 @@ CREATE TABLE emp (
 INSERT INTO emp VALUES (NULL, 'admin', '123456', 8000, 28);
 ```
 
-3. 修改 `src/com/qf/util/DBUtil.java` 中的数据库连接信息。
+3. **配置数据库连接**（二选一）：
+   - 设置环境变量 `DB_URL` / `DB_USER` / `DB_PASSWORD`（推荐，代码已支持）
+   - 或直接修改 `src/com/qf/util/DBUtil.java` 中的默认占位值
 4. 导入 Eclipse 并部署到 Tomcat，访问：
 
 ```
