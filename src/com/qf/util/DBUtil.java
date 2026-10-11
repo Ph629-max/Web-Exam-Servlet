@@ -7,14 +7,26 @@ import java.sql.Statement;
 
 /**
  * 数据库工具类 - 使用 try-with-resources 自动管理连接
+ *
+ * 连接信息优先从环境变量 / JVM 系统属性读取，未配置时回落到下面的占位值。
+ * 请勿把真实口令写死后提交到公开仓库。
  */
 public class DBUtil {
-	
-	// 数据库配置（生产环境请移入配置文件）
-	private static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai";
-	private static final String DB_USER = "root";
-	private static final String DB_PASSWORD = "123456";
-	
+
+	// 未配置时使用的默认值（占位，运行前请通过环境变量覆盖）
+	private static final String DB_URL = getConfig("DB_URL",
+			"jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai");
+	private static final String DB_USER = getConfig("DB_USER", "your_username");
+	private static final String DB_PASSWORD = getConfig("DB_PASSWORD", "your_password");
+
+	private static String getConfig(String key, String defaultValue) {
+		String value = System.getProperty(key);
+		if (value == null || value.isEmpty()) {
+			value = System.getenv(key);
+		}
+		return (value == null || value.isEmpty()) ? defaultValue : value;
+	}
+
 	static {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -22,7 +34,7 @@ public class DBUtil {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 获取数据库连接
 	 */
@@ -35,7 +47,7 @@ public class DBUtil {
 		}
 		return con;
 	}
-	
+
 	/**
 	 * 关闭连接资源（安全关闭，可传入 null）
 	 */
@@ -50,7 +62,7 @@ public class DBUtil {
 			}
 		}
 	}
-	
+
 	/**
 	 * 关闭 Connection + Statement + ResultSet（重载，兼容旧用法）
 	 */

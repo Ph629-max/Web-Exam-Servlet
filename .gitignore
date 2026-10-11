@@ -1,0 +1,20 @@
+# ---- build output ----
+build/
+out/
+*.class
+*.jar
+*.war
+
+# ---- IDE ----
+.idea/
+*.iml
+.vscode/
+*.launch
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+
+# ---- logs ----
+*.log
+logs/
